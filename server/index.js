@@ -26,7 +26,7 @@ io.on('connection', function(socket){
     var gameID = socket.id.slice(2);
 
     // PC端生成二维码
-    io.emit('init', gameID);
+    // io.emit('init', gameID);
     
     // 移动端输入玩家名称登录
     socket.on('login', function(msg) {
