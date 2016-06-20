@@ -10,10 +10,19 @@
     <title>输入名称 - 加入游戏</title>
 </head>
 <body>
-    <form action="">
-        <input type="text" style="border:1px solid #000;" id="m" autocomplete="off" />
-        <button>确定</button>
-    </form>
+    <div id="joinGame">
+        <form action="">
+            <input type="text" style="border:1px solid #000;" id="m" autocomplete="off" />
+            <button>确定</button>
+        </form>
+    </div>
+    <div id="readyGame" style="display:none;">
+        准备开始游戏
+    </div>
+    <div id="startGame" style="display:none;">
+        开始游戏 Go！
+    </div>
+    
 
     <script type="text/javascript" src="js/zepto.min.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>

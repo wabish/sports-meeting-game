@@ -9,12 +9,12 @@ var clientPath = path.join(__dirname, '../client');
 app.use(express.static(clientPath));
 
 app.get('/', function(req, res){
-    res.sendfile(path.join(clientPath, 'index.html'));
+    res.sendFile(clientPath + '/index.html');
 });
 
 app.get('/join', function(req, res) {
-    res.sendfile(path.join(clientPath, 'join.html'));
-})
+    res.sendFile(clientPath + '/join.html');
+});
 
 http.listen(3000, function(){
     console.log('listening on *:3000');
@@ -22,19 +22,23 @@ http.listen(3000, function(){
 
 // socket
 io.on('connection', function(socket){
+    // 因为'/#'字符串在url参数中有影响，所以截取掉
+    var gameID = socket.id.slice(2);
 
-    socket.on('login', function(name) {
-        console.log(name);
-        io.emit('login', name);
+    // PC端生成二维码
+    io.emit('init', gameID);
+    
+    // 移动端输入玩家名称登录
+    socket.on('login', function(msg) {
+        socket.join(msg.gameID);
+
+        if (msg.name) {
+            io.sockets.in(msg.gameID).emit('login', msg.name);
+        }
     });
 
-    // socket.on('chat message', function(msg) {
-    //     console.log(msg);
-    //     io.sockets.in('game').emit('chat message', msg);
-    // });
-
-  // socket.on('chat message', function(msg){
-  //   // console.log(socket.id);
-  //   io.emit('chat message', msg);
-  // });
+    // PC端开始游戏
+    socket.on('start-game', function(msg) {
+        io.sockets.in(msg.gameID).emit('start-game');
+    });
 });
