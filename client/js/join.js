@@ -18,14 +18,17 @@
 
     var gameID = getUrlParam('gameID');
     var socket = io();
+    var name = '';
 
     console.log(gameID);
 
     // 提交名称
     $('form').submit(function(){
+        name = $('#m').val();
+
         socket.emit('login', {
             gameID: gameID,
-            name: $('#m').val()
+            name: name
         });
         $('#m').val('');
 
@@ -39,5 +42,12 @@
     socket.on('start-game', function() {
         $('#readyGame').hide();
         $('#startGame').show();
+    });
+
+    $('#playBtn').on('click', function() {
+        socket.emit('play', {
+            gameID: gameID,
+            name: name
+        });
     });
 })();

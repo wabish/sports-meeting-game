@@ -1,9 +1,58 @@
 (function() {
+
+
+    // 连接socket
+    var socket = io();
+    var gameID = uuid(8, 10);
+    console.log(gameID);
+    createQrcode(gameID);
+
+    // 初始化房间
+    socket.emit('login', {
+        gameID:gameID
+    });
+
+    // 获取玩家名称
+    var playerNum = [];
+    socket.on('login', function(name) {
+        var text = $('#name').html();
+        if (text) {
+            $('#name').append(', ' + name);
+        } else {
+            $('#name').append(name);
+        }
+        playerNum.push(name);
+    });
+
+    // 开始游戏
+    $('#startGame').on('click', function() {
+        socket.emit('start-game', {
+            gameID: gameID
+        });
+
+        $('#joinScene').hide();
+
+        for (var i = 0; i < playerNum.length; i++) {
+            var html = '<div class="player" id="player' + playerNum[i] + '">' + playerNum[i] + '</div>';
+            $('#playScene').append(html);
+        }
+
+        socket.on('play', function(name) {
+            var playerID = '#player' + name;
+            var left = parseInt($(playerID).css('marginLeft'));
+            left += 5;
+            $(playerID).css('marginLeft', left + 'px');
+        });
+    });
+
+
+    // =========================================================================================
+
     // 生成二维码
     function createQrcode(gameID) {
        $('#qrcode').qrcode({
             text:  window.location.href + 'join?gameID=' + gameID
-        }); 
+        });
     }
 
     // 生成唯一标识
@@ -35,31 +84,4 @@
 
         return uuid.join('');
     }
-
-    // 连接socket
-    var socket = io();
-    var gameID = uuid(8, 10);
-    console.log(gameID);
-    createQrcode(gameID);
-
-    // 初始化房间
-    socket.emit('login', {
-        gameID:gameID    });
-
-    // 获取玩家名称
-    socket.on('login', function(name) {
-        var text = $('#name').html();
-        if (text) {
-            $('#name').append(', ' + name);
-        } else {
-            $('#name').append(name);
-        }
-    });
-
-    // // 开始游戏
-    $('#startGame').on('click', function() {
-        socket.emit('start-game', {
-            gameID: gameID
-        });
-    });
 })();

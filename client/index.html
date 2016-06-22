@@ -6,14 +6,15 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
-    <div id="qrcode" class="qrcode"></div>
+    <div id="joinScene">
+        <div id="qrcode" class="qrcode"></div>
+        <br>
+        加入名称：<span id="name"></span>
+        <br><br>
+        <input id="startGame" type="button" value="开始游戏" />
+    </div>
 
-    <br>
-    加入名称：<span id="name"></span>
-
-    <br><br>
-
-    <input id="startGame" type="button" value="开始游戏" />
+    <div id="playScene"></div>
 
     <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>

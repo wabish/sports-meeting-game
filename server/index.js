@@ -27,7 +27,7 @@ io.on('connection', function(socket){
 
     // PC端生成二维码
     // io.emit('init', gameID);
-    
+
     // 移动端输入玩家名称登录
     socket.on('login', function(msg) {
         socket.join(msg.gameID);
@@ -40,5 +40,10 @@ io.on('connection', function(socket){
     // PC端开始游戏
     socket.on('start-game', function(msg) {
         io.sockets.in(msg.gameID).emit('start-game');
+    });
+
+    // 正在游戏
+    socket.on('play', function(msg) {
+        io.sockets.in(msg.gameID).emit('play', msg.name);
     });
 });
